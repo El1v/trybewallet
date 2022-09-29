@@ -1,11 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 
 class Wallet extends React.Component {
   render() {
     // const { user } = this.props;
     // console.log(user);
-    return <h1>TrybeWallet</h1>;
+    return (
+      <div>
+        <Header />
+      </div>
+    );
   }
 }
 
