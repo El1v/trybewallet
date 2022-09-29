@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchAPI } from '../redux/actions';
 
@@ -8,6 +9,7 @@ class WalletForm extends Component {
     description: '',
     tag: '',
     method: '',
+    currency: '',
   };
 
   componentDidMount() {
@@ -26,7 +28,7 @@ class WalletForm extends Component {
   };
 
   render() {
-    const { value, description, tag, method } = this.state;
+    const { value, description, tag, method, currency } = this.state;
     const { isLoading, currencies } = this.props;
     return (
       <div>
@@ -45,17 +47,17 @@ class WalletForm extends Component {
               />
             </label>
 
-            <label htmlFor="currencies">
+            <label htmlFor="currency">
               Moeda:
               <select
-                id="currencies"
-                value={ currencies }
-                name="currencies"
+                id="currency"
+                value={ currency }
+                name="currency"
                 onChange={ this.handleChange }
                 data-testid="currency-input"
               >
-                {currencies.map((currency) => (
-                  <option key={ currency } value={ currency }>{currency}</option>
+                {currencies.map((item) => (
+                  <option key={ item } value={ item }>{item}</option>
                 ))}
               </select>
             </label>
@@ -117,5 +119,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getCurrencies: () => dispatch(fetchAPI()),
 });
+
+WalletForm.propTypes = {
+  isLoading: PropTypes.string,
+  currencies: PropTypes.array,
+}.isRequired;
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletForm);
