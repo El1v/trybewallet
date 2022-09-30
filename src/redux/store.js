@@ -11,6 +11,10 @@ const store = createStore(
   ),
 );
 
+store.subscribe(() => {
+  console.log(store.getState().wallet.expenses);
+});
+
 if (window.Cypress) {
   window.store = store;
 }

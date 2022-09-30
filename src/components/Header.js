@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 
 class Header extends Component {
   state = {
-    total: 0,
     currency: 'BRL',
   };
 
   render() {
     const { user } = this.props;
-    const { email } = user;
-    const { total, currency } = this.state;
+    const { email, total } = user;
+    const { currency } = this.state;
 
     return (
       <div>
@@ -19,8 +18,8 @@ class Header extends Component {
           Email:
           {email}
         </span>
+        <span>Despesa Total: R$</span>
         <span data-testid="total-field">
-          Despesa Total: R$
           {total}
         </span>
         <span data-testid="header-currency-field">

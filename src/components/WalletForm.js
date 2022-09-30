@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchAPI } from '../redux/actions';
+import { fetchAPI, fetchApiPrice } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
     value: '',
     description: '',
-    tag: '',
-    method: '',
-    currency: '',
+    tag: 'Alimentação',
+    method: 'Dinheiro',
+    currency: 'USD',
   };
 
   componentDidMount() {
@@ -17,14 +17,22 @@ class WalletForm extends Component {
   }
 
   getCurrencies = async () => {
-    const { getCurrencies } = this.props;
-    getCurrencies();
+    const { dispatch } = this.props;
+    dispatch(fetchAPI());
   };
 
   handleChange = ({ target }) => {
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({ [name]: value });
+  };
+
+  handleBtn = () => {
+    const { dispatch, expenses } = this.props;
+    const { value, description, tag, method, currency } = this.state;
+    const id = expenses.length;
+    dispatch(fetchApiPrice({ id, value, description, tag, method, currency }));
+    this.setState({ value: '', description: '' });
   };
 
   render() {
@@ -105,6 +113,14 @@ class WalletForm extends Component {
                 onChange={ this.handleChange }
               />
             </label>
+
+            <button
+              type="button"
+              onClick={ this.handleBtn }
+              // disabled={ isDisabled }
+            >
+              Adicionar despesa
+            </button>
           </div>) }
       </div>
     );
@@ -114,15 +130,17 @@ class WalletForm extends Component {
 const mapStateToProps = (state) => ({
   isLoading: state.wallet.isLoading,
   currencies: state.wallet.currencies,
+  expenses: state.wallet.expenses,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  getCurrencies: () => dispatch(fetchAPI()),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   getCurrencies: () => dispatch(fetchAPI()),
+//   expense: (expense) => dispatch(addExpense(expense)),
+// });
 
 WalletForm.propTypes = {
   isLoading: PropTypes.string,
   currencies: PropTypes.array,
 }.isRequired;
 
-export default connect(mapStateToProps, mapDispatchToProps)(WalletForm);
+export default connect(mapStateToProps, null)(WalletForm);
