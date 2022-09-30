@@ -58,6 +58,7 @@ export function fetchApiPrice(obj) {
       // console.log(obj.value);
       const total = data[obj.currency].ask * obj.value;
       const totalFixed = total.toFixed(2);
+
       dispatch(addExpense(
         { ...obj, exchangeRates: data },
       ));

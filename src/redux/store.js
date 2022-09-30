@@ -12,7 +12,7 @@ const store = createStore(
 );
 
 // store.subscribe(() => {
-//   console.log(store.getState().wallet.expenses);
+//   console.log(store.getState());
 // });
 
 if (window.Cypress) {
