@@ -5,7 +5,8 @@ import { Router } from 'react-router-dom';
 import { applyMiddleware, createStore } from 'redux';
 import { render } from '@testing-library/react';
 import thunk from 'redux-thunk';
-import rootReducer from '../../redux/reducers';
+// import rootReducer from '../../redux/reducers';
+import reducer from '../../redux/reducers';
 
 function withRouter(component, history) {
   return (
@@ -38,8 +39,36 @@ export function renderWithRouter(
 
 export function renderWithRedux(component, options = {}) {
   const {
-    initialState = {},
-    store = createStore(rootReducer, initialState, applyMiddleware(thunk)),
+    initialState = {
+      user: {
+        email: 'eliveltonmn@trybe.com',
+        total: '10',
+      },
+      wallet: {
+        isLoading: false,
+        currencies: ['USD', 'CAD', 'GBP'],
+        expenses: [
+          {
+            id: 0,
+            value: '10',
+            description: 'description',
+            tag: 'Lazer',
+            method: 'Dinheiro',
+            currency: 'USD',
+            exchangeRates: {
+              USD: {
+                code: 'USD',
+                name: 'Dólar Americano/Real Brasileiro',
+                ask: '5.41',
+              },
+            },
+          },
+        ],
+        editor: false,
+        idToEdit: 0,
+      },
+    },
+    store = createStore(reducer, initialState, applyMiddleware(thunk)),
   } = options;
 
   return {
