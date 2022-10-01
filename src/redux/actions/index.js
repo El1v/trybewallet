@@ -1,15 +1,19 @@
 export const GET_EMAIL = 'GET_EMAIL';
 export const GET_TOTAL = 'GET_TOTAL';
+export const CALCULATE_TOTAL = 'CALCULATE_TOTAL';
 
 export const REQUEST_API = 'REQUEST_API';
 export const GET_CURRENCIES = 'GET_CURRENCIES';
 export const GET_ERROR = 'GET_ERROR';
 
 export const ADD_EXPENSE = 'ADD_EXPENSE';
+export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
 
 export const getTotal = (payload) => ({ type: GET_TOTAL, payload });
 
 export const getEmail = (payload) => ({ type: GET_EMAIL, payload });
+
+export const calculateTotal = (payload) => ({ type: CALCULATE_TOTAL, payload });
 
 export const requestAPI = () => (
   { type: REQUEST_API, loading: true,
@@ -28,6 +32,11 @@ export const getError = (error) => (
 export const addExpense = (payload) => (
   {
     type: ADD_EXPENSE, payload,
+  });
+
+export const removeExpense = (payload) => (
+  {
+    type: REMOVE_EXPENSE, payload,
   });
 
 export function fetchAPI() {

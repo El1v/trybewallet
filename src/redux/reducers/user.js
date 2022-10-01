@@ -1,5 +1,5 @@
 // Esse reducer será responsável por tratar as informações da pessoa usuária
-import { GET_EMAIL, GET_TOTAL } from '../actions';
+import { GET_EMAIL, GET_TOTAL, CALCULATE_TOTAL } from '../actions';
 
 const INITIAL_STATE = {
   email: '',
@@ -14,6 +14,15 @@ function user(state = INITIAL_STATE, action) {
     const total = (parseFloat(state.total) + parseFloat(action.payload));
     const newTotal = total.toFixed(2);
     return { ...state, total: newTotal }; }
+  case CALCULATE_TOTAL: {
+    console.log(state);
+    console.log(action.payload);
+    const newTotal = parseFloat(state.total) - parseFloat(action.payload);
+    const newTotalFixed = newTotal.toFixed(2);
+    return {
+      ...state,
+      total: newTotalFixed,
+    }; }
   default:
     return state;
   }
