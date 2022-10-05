@@ -1,21 +1,15 @@
 import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithRedux } from './helpers/renderWith';
+import { renderWithRedux, renderWithRouterAndRedux } from './helpers/renderWith';
 import WalletForm from '../components/WalletForm';
 import mockData from './helpers/mockData';
+import Wallet from '../pages/Wallet';
 
 describe('Testes no componente WalletForm', () => {
-  // beforeEach(() => {
-  //   global.fetch = jest.fn(mockData);
-  // });
-
-  // afterEach(() => {
-  //   global.fetch.mockClear();
-  // });
-
+  const LOADING = 'LOADING...';
   it('Verifica se o componente carrega as informações corretas', async () => {
     renderWithRedux(<WalletForm />);
-    await waitForElementToBeRemoved(() => screen.getByText('LOADING...'));
+    await waitForElementToBeRemoved(() => screen.getByText(LOADING));
 
     const valueInput = screen.getByTestId('value-input');
     expect(valueInput).toBeInTheDocument();
@@ -52,5 +46,26 @@ describe('Testes no componente WalletForm', () => {
     const addExpense = screen.getByRole('button', { name: /adicionar despesa/i });
     userEvent.click(addExpense);
     expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+  it('Verifica se é possivel deletar algum item da lista', async () => {
+    const { store } = renderWithRouterAndRedux(<Wallet />, ['/carteira']);
+    await waitForElementToBeRemoved(() => screen.getByText(LOADING));
+    expect(store.getState().wallet.expenses.length).toBe(1);
+    const deleteBtn = screen.getByRole('button', { name: /excluir/i });
+    expect(deleteBtn).toBeInTheDocument();
+    userEvent.click(deleteBtn);
+    expect(store.getState().wallet.expenses.length).toBe(0);
+  });
+  it('Verifica se é possivel editar algum item da lista', async () => {
+    const { store } = renderWithRouterAndRedux(<Wallet />, ['/carteira']);
+    await waitForElementToBeRemoved(() => screen.getByText(LOADING));
+    expect(store.getState().wallet.expenses.length).toBe(1);
+    const editBtn = screen.getByRole('button', { name: /editar/i });
+    expect(editBtn).toBeInTheDocument();
+    userEvent.click(editBtn);
+    const mainEditBtn = screen.getByRole('button', { name: /editar despesa/i });
+    expect(mainEditBtn).toBeInTheDocument();
+    userEvent.click(mainEditBtn);
+    expect(store.getState().wallet.expenses.length).toBe(1);
   });
 });

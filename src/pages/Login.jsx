@@ -16,8 +16,7 @@ class Login extends React.Component {
   //   this.setState({ [name]: value });
   // };
   handleChangeLogin = ({ target }) => {
-    const { name } = target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const { name, value } = target;
     this.setState({ [name]: value }, () => {
       this.verifiyBtn();
     });

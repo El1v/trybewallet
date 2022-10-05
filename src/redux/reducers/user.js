@@ -15,12 +15,7 @@ function user(state = INITIAL_STATE, action) {
     const newTotal = total.toFixed(2);
     return { ...state, total: newTotal }; }
   case CALCULATE_TOTAL: {
-    console.log(state.total);
-    console.log(action.payload);
-
     const newTotal = parseFloat(state.total) - parseFloat(action.payload);
-    console.log(newTotal);
-    console.log('teste');
     const newTotalFixed = newTotal.toFixed(2);
     return {
       ...state,

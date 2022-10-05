@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
 import Login from '../pages/Login';
+import App from '../App';
 
 describe('Testa tela de login', () => {
   it('Verifica se os elementos estão na tela ', () => {
@@ -14,7 +15,7 @@ describe('Testa tela de login', () => {
     expect(submitBtn).toBeInTheDocument();
   });
   it('Verifica validação de login ', () => {
-    const { history } = renderWithRouterAndRedux(<Login />);
+    const { history } = renderWithRouterAndRedux(<App />);
     const emailInput = screen.getByTestId('email-input');
     expect(emailInput).toBeInTheDocument();
     userEvent.type(emailInput, 'eliveltonmn@trybe.com');
@@ -28,7 +29,7 @@ describe('Testa tela de login', () => {
 
     userEvent.type(passwordInput, 'senha1234');
     expect(submitBtn).not.toBeDisabled();
-    history.push('/carteira');
-    // userEvent.click(submitBtn);
+    userEvent.click(submitBtn);
+    expect(history.location.pathname).toBe('/carteira');
   });
 });
