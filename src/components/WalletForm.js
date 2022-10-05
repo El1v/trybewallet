@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchAPI, fetchApiPrice } from '../redux/actions';
+import { fetchAPI, fetchApiPrice, removeExpense, calculateTotal, addExpense, getTotal }
+  from '../redux/actions';
 import Table from './Table';
 
 class WalletForm extends Component {
@@ -35,9 +36,33 @@ class WalletForm extends Component {
     this.setState({ value: '', description: '' });
   };
 
+  handleBtnEdit = () => {
+    const { idToEdit, expenses, dispatch, valueToEdit } = this.props;
+    const { value, description, tag, method, currency } = this.state;
+    dispatch(removeExpense(idToEdit));
+    dispatch(calculateTotal(valueToEdit));
+    const objTeste = {
+      id: idToEdit,
+      value,
+      description,
+      tag,
+      method,
+      currency,
+    };
+    dispatch(addExpense(
+      { ...objTeste, exchangeRates: expenses[idToEdit].exchangeRates },
+    ));
+    const newTotal = expenses[idToEdit].exchangeRates[currency].ask * value;
+    dispatch(getTotal(newTotal));
+  };
+
+  // const total = data[obj.currency].ask * obj.value;
+  // const totalFixed = total.toFixed(2);
+  // dispatch(getTotal(totalFixed));
+
   render() {
     const { value, description, tag, method, currency } = this.state;
-    const { isLoading, currencies } = this.props;
+    const { isLoading, currencies, editor } = this.props;
     return (
       <div>
         {isLoading && <div>LOADING...</div>}
@@ -114,13 +139,22 @@ class WalletForm extends Component {
               />
             </label>
 
-            <button
-              type="button"
-              onClick={ this.handleBtn }
-              // disabled={ isDisabled }
-            >
-              Adicionar despesa
-            </button>
+            {!editor && (
+              <button
+                type="button"
+                onClick={ this.handleBtn }
+                // disabled={ isDisabled }
+              >
+                Adicionar despesa
+              </button>)}
+
+            {editor && (
+              <button
+                type="button"
+                onClick={ this.handleBtnEdit }
+              >
+                Editar despesa
+              </button>)}
 
             <Table />
           </div>) }
@@ -133,6 +167,10 @@ const mapStateToProps = (state) => ({
   isLoading: state.wallet.isLoading,
   currencies: state.wallet.currencies,
   expenses: state.wallet.expenses,
+  editor: state.wallet.editor,
+  idToEdit: state.wallet.idToEdit,
+  valueToEdit: state.wallet.valueToEdit,
+
 });
 
 // const mapDispatchToProps = (dispatch) => ({

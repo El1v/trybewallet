@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { removeExpense, calculateTotal } from '../redux/actions';
+import { removeExpense, calculateTotal, editExpense } from '../redux/actions';
 
 class Table extends Component {
   handleRemove = (id, value) => {
@@ -10,8 +10,14 @@ class Table extends Component {
     dispatch(calculateTotal(value));
   };
 
+  handleEdit = (idToEdit, value) => {
+    const { dispatch } = this.props;
+    dispatch(editExpense({ idToEdit, value }));
+  };
+
   render() {
     const { expenses } = this.props;
+    const expensesSort = expenses.sort((a, b) => a.id - b.id);
     return (
       <div>
         <table>
@@ -31,7 +37,7 @@ class Table extends Component {
 
           <tbody>
             {
-              expenses.map((element) => {
+              expensesSort.map((element) => {
                 const convertedValue = parseFloat(
                   element.exchangeRates[element.currency].ask,
                 )
@@ -61,6 +67,15 @@ class Table extends Component {
                         }
                       >
                         Excluir
+                      </button>
+                      <button
+                        data-testid="edit-btn"
+                        type="button"
+                        onClick={
+                          () => this.handleEdit(element.id, convertedValueFixed)
+                        }
+                      >
+                        Editar
                       </button>
                     </td>
                   </tr>

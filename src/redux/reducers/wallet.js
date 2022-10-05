@@ -1,6 +1,6 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 import {
-  GET_CURRENCIES, GET_ERROR, REQUEST_API, ADD_EXPENSE, REMOVE_EXPENSE,
+  GET_CURRENCIES, GET_ERROR, REQUEST_API, ADD_EXPENSE, REMOVE_EXPENSE, EDIT_EXPENSE,
 } from '../actions';
 
 const INITIAL_STATE = {
@@ -33,6 +33,8 @@ function wallet(state = INITIAL_STATE, action) {
     return {
       ...state,
       isLoading: false,
+      editor: false,
+      idToEdit: 0,
       expenses: [
         ...state.expenses,
         action.payload],
@@ -43,6 +45,14 @@ function wallet(state = INITIAL_STATE, action) {
       ...state,
       isLoading: false,
       expenses: [...newArray],
+    }; }
+  case EDIT_EXPENSE: {
+    return {
+      ...state,
+      editor: true,
+      idToEdit: action.payload.idToEdit,
+      valueToEdit: action.payload.value,
+      isLoading: false,
     }; }
   default:
     return state;
