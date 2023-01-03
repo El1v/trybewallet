@@ -41,7 +41,7 @@ class Table extends Component {
                 const convertedValue = parseFloat(
                   element.exchangeRates[element.currency].ask,
                 )
-                * parseFloat(element.value);
+                * parseFloat(element.newValue);
                 const convertedValueFixed = convertedValue.toFixed(2);
 
                 const convertedCurrency = parseFloat(
@@ -53,7 +53,7 @@ class Table extends Component {
                     <td>{element.description}</td>
                     <td>{element.tag}</td>
                     <td>{element.method}</td>
-                    <td>{parseFloat(element.value).toFixed(2)}</td>
+                    <td>{parseFloat(element.newValue).toFixed(2)}</td>
                     <td>{element.exchangeRates[element.currency].name}</td>
                     <td>{convertedCurrencyFixed}</td>
                     <td>{convertedValueFixed}</td>

@@ -12,6 +12,7 @@ class WalletForm extends Component {
     tag: 'Alimentação',
     method: 'Dinheiro',
     currency: 'USD',
+    lastId: 0,
   };
 
   componentDidMount() {
@@ -29,11 +30,15 @@ class WalletForm extends Component {
   };
 
   handleBtn = () => {
-    const { dispatch, expenses } = this.props;
-    const { value, description, tag, method, currency } = this.state;
-    const id = expenses.length;
-    dispatch(fetchApiPrice({ id, value, description, tag, method, currency }));
-    this.setState({ value: '', description: '' });
+    const { dispatch } = this.props;
+    const { value, description, tag, method, currency, lastId } = this.state;
+    let newValue = Number(value);
+    if (Number.isNaN(newValue)) {
+      newValue = 0;
+    }
+    let id = lastId;
+    dispatch(fetchApiPrice({ id, newValue, description, tag, method, currency }));
+    this.setState({ value: '', description: '', lastId: id += 1 });
   };
 
   handleBtnEdit = () => {
@@ -54,6 +59,7 @@ class WalletForm extends Component {
     ));
     const newTotal = expenses[idToEdit].exchangeRates[currency].ask * value;
     dispatch(getTotal(newTotal));
+    this.setState({ value: '', description: '' });
   };
 
   // const total = data[obj.currency].ask * obj.value;

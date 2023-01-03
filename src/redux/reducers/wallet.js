@@ -40,7 +40,8 @@ function wallet(state = INITIAL_STATE, action) {
         action.payload],
     };
   case REMOVE_EXPENSE: {
-    const newArray = state.expenses.filter((element, index) => index !== action.payload);
+    const newArray = state.expenses
+      .filter((element) => element.id !== action.payload);
     return {
       ...state,
       isLoading: false,

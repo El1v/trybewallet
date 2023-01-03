@@ -71,9 +71,8 @@ export function fetchApiPrice(obj) {
       const data = await response.json();
       // console.log(data[obj.currency].ask);
       // console.log(obj.value);
-      const total = data[obj.currency].ask * obj.value;
+      const total = data[obj.currency].ask * obj.newValue;
       const totalFixed = total.toFixed(2);
-
       dispatch(addExpense(
         { ...obj, exchangeRates: data },
       ));
@@ -84,15 +83,3 @@ export function fetchApiPrice(obj) {
     }
   };
 }
-
-// teste = (curr, expenses) => {
-//   const reduce = expenses.reduce((totalSum, item) => {
-//     // console.log(item.exchangeRates[item.currency].ask);
-//     const { value, currency } = item;
-//     console.log(value, currency);
-//     // const { ask } = exchangeRates[currency];
-//     // return totalSum + (ask * value);
-//   }, 0);
-//   const totalFixed = reduce.toFixed(2);
-//   dispatch(getTotal(totalFixed));
-// };
