@@ -1,7 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Button, TextField } from '@mui/material';
 import { getEmail } from '../redux/actions';
+import {
+  CustomAsideLogin, CustomContentLogin, CustomFormLogin, CustomStackLogin,
+} from '../styles/login';
 
 class Login extends React.Component {
   state = {
@@ -43,33 +47,46 @@ class Login extends React.Component {
   render() {
     const { email, password, isDisabled } = this.state;
     return (
-      <div>
-        <form>
-          <input
-            type="text"
-            data-testid="email-input"
-            name="email"
-            value={ email }
-            onChange={ this.handleChangeLogin }
-            placeholder="Digite seu email"
-          />
-          <input
-            type="password"
-            data-testid="password-input"
-            name="password"
-            value={ password }
-            onChange={ this.handleChangeLogin }
-            placeholder="Digite sua senha"
-          />
-          <button
-            type="submit"
-            onClick={ this.handleBtn }
-            disabled={ isDisabled }
-          >
-            Entrar
-          </button>
-        </form>
-      </div>
+      <CustomContentLogin>
+        <CustomAsideLogin>
+          <img width={ 700 } src="/assets/ilustracao.jpg" alt="" />
+        </CustomAsideLogin>
+        <CustomFormLogin elevation={ 3 }>
+          <CustomStackLogin spacing={ 2 }>
+            <img width={ 170 } src="/assets/money.png" alt="" />
+
+            <TextField
+              variant="outlined"
+              label="Email"
+              type="text"
+              fullWidth
+              data-testid="email-input"
+              name="email"
+              value={ email }
+              onChange={ this.handleChangeLogin }
+            />
+            <TextField
+              variant="outlined"
+              label="Senha"
+              type="password"
+              fullWidth
+              data-testid="password-input"
+              name="password"
+              value={ password }
+              onChange={ this.handleChangeLogin }
+            />
+            <Button
+              variant="contained"
+              fullWidth
+              type="submit"
+              onClick={ this.handleBtn }
+              disabled={ isDisabled }
+            >
+              Entrar
+            </Button>
+          </CustomStackLogin>
+        </CustomFormLogin>
+      </CustomContentLogin>
     );
   }
 }

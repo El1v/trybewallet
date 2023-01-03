@@ -3,18 +3,23 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import { Provider } from 'react-redux';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import store from './redux/store';
+import theme from './theme';
 
 ReactDOM
   .createRoot(document.getElementById('root'))
   .render(
-    <BrowserRouter>
-      <Provider store={ store }>
-        <App />
-      </Provider>
-    </BrowserRouter>,
+    <ThemeProvider theme={ theme }>
+      <BrowserRouter>
+        <Provider store={ store }>
+          <CssBaseline />
+          <App />
+        </Provider>
+      </BrowserRouter>
+    </ThemeProvider>,
 
   );
 

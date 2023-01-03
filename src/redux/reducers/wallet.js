@@ -9,6 +9,7 @@ const INITIAL_STATE = {
   expenses: [],
   editor: false,
   idToEdit: 0,
+  isEditing: false,
 };
 
 function wallet(state = INITIAL_STATE, action) {
@@ -35,6 +36,7 @@ function wallet(state = INITIAL_STATE, action) {
       isLoading: false,
       editor: false,
       idToEdit: 0,
+      isEditing: false,
       expenses: [
         ...state.expenses,
         action.payload],
@@ -45,6 +47,7 @@ function wallet(state = INITIAL_STATE, action) {
     return {
       ...state,
       isLoading: false,
+      editor: false,
       expenses: [...newArray],
     }; }
   case EDIT_EXPENSE: {

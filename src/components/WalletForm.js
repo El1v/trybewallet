@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import {
+  Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField }
+  from '@mui/material';
 import { fetchAPI, fetchApiPrice, removeExpense, calculateTotal, addExpense, getTotal }
   from '../redux/actions';
-import Table from './Table';
+import { CustomInputBox } from '../styles/wallet';
 
 class WalletForm extends Component {
   state = {
@@ -44,18 +47,22 @@ class WalletForm extends Component {
   handleBtnEdit = () => {
     const { idToEdit, expenses, dispatch, valueToEdit } = this.props;
     const { value, description, tag, method, currency } = this.state;
+    let newValue = Number(value);
+    if (Number.isNaN(newValue)) {
+      newValue = 0;
+    }
     dispatch(removeExpense(idToEdit));
     dispatch(calculateTotal(valueToEdit));
     const objTeste = {
       id: idToEdit,
-      value,
+      newValue,
       description,
       tag,
       method,
       currency,
     };
     dispatch(addExpense(
-      { ...objTeste, exchangeRates: expenses[idToEdit].exchangeRates },
+      { ...objTeste, exchangeRates: expenses[idToEdit].exchangeRates, isEditing: false },
     ));
     const newTotal = expenses[idToEdit].exchangeRates[currency].ask * value;
     dispatch(getTotal(newTotal));
@@ -73,10 +80,11 @@ class WalletForm extends Component {
       <div>
         {isLoading && <div>LOADING...</div>}
         {!isLoading && (
-          <div>
-            <label htmlFor="value">
-              Valor:
-              <input
+          <CustomInputBox>
+            <Stack direction="row" spacing={ 2 }>
+              <TextField
+                variant="outlined"
+                label="Valor"
                 id="value"
                 type="text"
                 data-testid="value-input"
@@ -84,58 +92,64 @@ class WalletForm extends Component {
                 value={ value }
                 onChange={ this.handleChange }
               />
-            </label>
 
-            <label htmlFor="currency">
-              Moeda:
-              <select
-                id="currency"
-                value={ currency }
-                name="currency"
-                onChange={ this.handleChange }
-                data-testid="currency-input"
-              >
-                {currencies.map((item) => (
-                  <option key={ item } value={ item }>{item}</option>
-                ))}
-              </select>
-            </label>
+              <FormControl>
+                <InputLabel id="currencyLabel">Moeda</InputLabel>
 
-            <label htmlFor="method">
-              Método de pagamento:
-              <select
-                id="method"
-                value={ method }
-                name="method"
-                onChange={ this.handleChange }
-                data-testid="method-input"
-              >
-                <option value="Dinheiro">Dinheiro</option>
-                <option value="Cartão de crédito">Cartão de crédito</option>
-                <option value="Cartão de débito">Cartão de débito</option>
-              </select>
-            </label>
+                <Select
+                  label="Moeda"
+                  labelId="currencyLabel"
+                  id="currency"
+                  value={ currency }
+                  name="currency"
+                  onChange={ this.handleChange }
+                  data-testid="currency-input"
+                >
+                  {currencies.map((item) => (
+                    <MenuItem key={ item } value={ item }>{item}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-            <label htmlFor="tag">
-              Categoria:
-              <select
-                id="tag"
-                value={ tag }
-                name="tag"
-                onChange={ this.handleChange }
-                data-testid="tag-input"
-              >
-                <option value="Alimentação">Alimentação</option>
-                <option value="Lazer">Lazer</option>
-                <option value="Trabalho">Trabalho</option>
-                <option value="Transporte">Transporte</option>
-                <option value="Saúde">Saúde</option>
-              </select>
-            </label>
+              <FormControl>
+                <InputLabel id="methodLabel">Método de pagamento</InputLabel>
+                <Select
+                  label="Método de pagamento"
+                  labelId="methodLabel"
+                  id="method"
+                  value={ method }
+                  name="method"
+                  onChange={ this.handleChange }
+                  data-testid="method-input"
+                >
+                  <MenuItem value="Dinheiro">Dinheiro</MenuItem>
+                  <MenuItem value="Cartão de crédito">Cartão de crédito</MenuItem>
+                  <MenuItem value="Cartão de débito">Cartão de débito</MenuItem>
+                </Select>
+              </FormControl>
 
-            <label htmlFor="description">
-              Descrição:
-              <input
+              <FormControl>
+                <InputLabel id="tagLabel">Categoria</InputLabel>
+                <Select
+                  label="Categoria"
+                  labelId="tagLabel"
+                  id="tag"
+                  value={ tag }
+                  name="tag"
+                  onChange={ this.handleChange }
+                  data-testid="tag-input"
+                >
+                  <MenuItem value="Alimentação">Alimentação</MenuItem>
+                  <MenuItem value="Lazer">Lazer</MenuItem>
+                  <MenuItem value="Trabalho">Trabalho</MenuItem>
+                  <MenuItem value="Transporte">Transporte</MenuItem>
+                  <MenuItem value="Saúde">Saúde</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                variant="outlined"
+                label="Descrição"
                 id="description"
                 type="text"
                 data-testid="description-input"
@@ -143,27 +157,27 @@ class WalletForm extends Component {
                 value={ description }
                 onChange={ this.handleChange }
               />
-            </label>
 
-            {!editor && (
-              <button
-                type="button"
-                onClick={ this.handleBtn }
+              {!editor && (
+                <Button
+                  variant="contained"
+                  type="button"
+                  onClick={ this.handleBtn }
                 // disabled={ isDisabled }
-              >
-                Adicionar despesa
-              </button>)}
+                >
+                  Adicionar despesa
+                </Button>)}
 
-            {editor && (
-              <button
-                type="button"
-                onClick={ this.handleBtnEdit }
-              >
-                Editar despesa
-              </button>)}
-
-            <Table />
-          </div>) }
+              {editor && (
+                <Button
+                  variant="contained"
+                  type="button"
+                  onClick={ this.handleBtnEdit }
+                >
+                  Editar despesa
+                </Button>)}
+            </Stack>
+          </CustomInputBox>) }
       </div>
     );
   }
